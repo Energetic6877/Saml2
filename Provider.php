@@ -446,12 +446,16 @@ class Provider extends AbstractProvider implements SocialiteProvider
 
     protected function getDefaultAssertionConsumerServiceBinding(): string
     {
-        $default = $this->hasRouteBindingType(
+        $value = $this->getConfig('sp_default_binding_method');
+
+        if (isset($value)) {
+            return $value;
+        }
+
+        return $this->hasRouteBindingType(
             $this->getAssertionConsumerServiceRoute(),
             SamlConstants::BINDING_SAML2_HTTP_POST
         ) ? SamlConstants::BINDING_SAML2_HTTP_POST : SamlConstants::BINDING_SAML2_HTTP_REDIRECT;
-
-        return $this->getConfig('sp_default_binding_method', $default);
     }
 
     protected function hasRouteBindingType(string $route, string $bindingType): bool
